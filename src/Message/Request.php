@@ -11,7 +11,7 @@ class Request extends Message implements RequestInterface
         protected readonly string $uri,
         array $headers = [],
         null|string $body = null,
-        string $protocolVersion = CURL_HTTP_VERSION_1_1,
+        string $protocolVersion = '1.1',
     ) {
         parent::__construct($headers, $body, $protocolVersion);
     }
