@@ -50,7 +50,7 @@ class ClientWrapper
         string $url,
     ): RequestInterface {
         $query = http_build_query($query);
-        $url = $url . $query;
+        $url = $url . ($query === '' ? $query : '?' . $query);
 
         if ($body !== null) {
             $body = http_build_query($body);
@@ -69,10 +69,10 @@ class ClientWrapper
     protected function getDefaultValues(): array
     {
         return [
-            'defaultQuery' => static::DEFAULT_QUERY,
-            'defaultHeaders' => static::DEFAULT_HEADERS,
-            'defaultBody' => static::DEFAULT_BODY,
-            'baseUrl' => static::BASE_URL,
+            static::DEFAULT_QUERY,
+            static::DEFAULT_HEADERS,
+            static::DEFAULT_BODY,
+            static::BASE_URL,
         ];
     }
 
@@ -94,6 +94,21 @@ class ClientWrapper
     final public function patch(string $url, null|array $query = null, array $headers = [], null|array $body = null): ResponseInterface
     {
         return $this->request('PATCH', $url, $query, $headers, $body);
+    }
+
+    final public function delete(string $url, null|array $query = null, array $headers = [], null|array $body = null): ResponseInterface
+    {
+        return $this->request('DELETE', $url, $query, $headers, $body);
+    }
+
+    final public function head(string $url, null|array $query = null, array $headers = []): ResponseInterface
+    {
+        return $this->request('HEAD', $url, $query, $headers);
+    }
+
+    final public function options(string $url, null|array $query = null, array $headers = []): ResponseInterface
+    {
+        return $this->request('OPTIONS', $url, $query, $headers);
     }
 
     final public function request(string $method, string $url, null|array $query = null, array $headers = [], null|array $body = null): ResponseInterface

@@ -14,11 +14,7 @@ class RequestService implements RequestServiceInterface
     public function request(RequestInterface $request): ResponseInterface
     {
         $handle = curl_init($request->getUri());
-
-        $noResponseBodyMode = in_array($request->getMethod(), [
-            HttpMethods::HEAD,
-            HttpMethods::TRACE,
-        ], true);
+        $noResponseBodyMode = in_array($request->getMethod(), [HttpMethods::HEAD, HttpMethods::TRACE], true);
 
         $headers = [];
         $headerParser = function (CurlHandle $curl, string $header) use (&$headers) {
@@ -37,6 +33,7 @@ class RequestService implements RequestServiceInterface
             CURLOPT_CUSTOMREQUEST => $request->getMethod(),
             CURLOPT_URL => $request->getUri(),
             CURLOPT_HEADEROPT => $request->getHeaders(),
+            CURLOPT_HTTP_VERSION => $this->getCurlProtocolVersion($request->getProtocolVersion()),
             CURLOPT_HEADERFUNCTION => $headerParser,
             CURLOPT_RETURNTRANSFER => true,
         ];
@@ -65,5 +62,14 @@ class RequestService implements RequestServiceInterface
         unset($handle);
 
         return new Response($responseCode, $headers, $responseBody);
+    }
+
+    protected function getCurlProtocolVersion(string $protocolVersion): int
+    {
+        return match ($protocolVersion) {
+            '1.0' => CURL_HTTP_VERSION_1_0,
+            '2.0' => CURL_HTTP_VERSION_2_0,
+            default => CURL_HTTP_VERSION_1_1,
+        };
     }
 }

@@ -10,9 +10,10 @@ class Request extends Message implements RequestInterface
         protected readonly string $method,
         protected readonly string $uri,
         array $headers = [],
-        null|string $body = null
+        null|string $body = null,
+        string $protocolVersion = CURL_HTTP_VERSION_1_1,
     ) {
-        parent::__construct($headers, $body);
+        parent::__construct($headers, $body, $protocolVersion);
     }
 
     public function getUri(): string
