@@ -11,10 +11,10 @@ class Client implements ClientInterface
 {
     use HttpMethodsTrait;
 
-    public function __construct(protected RequestServiceInterface $requestService = new RequestService()) {}
+    public function __construct(protected RequestSenderInterface $requestSender = new RequestSender()) {}
 
     final public function request(RequestInterface $request): ResponseInterface
     {
-        return $this->requestService->request($request);
+        return $this->requestSender->send($request);
     }
 }

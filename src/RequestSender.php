@@ -9,9 +9,9 @@ use Lilith\Http\Message\RequestInterface;
 use Lilith\Http\Message\Response;
 use Lilith\Http\Message\ResponseInterface;
 
-class RequestService implements RequestServiceInterface
+class RequestSender implements RequestSenderInterface
 {
-    public function request(RequestInterface $request): ResponseInterface
+    public function send(RequestInterface $request): ResponseInterface
     {
         $handle = curl_init($request->getUri());
         $noResponseBodyMode = in_array($request->getMethod(), [HttpMethods::HEAD, HttpMethods::TRACE], true);

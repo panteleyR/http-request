@@ -7,7 +7,7 @@ namespace Lilith\Http;
 use Lilith\Http\Message\RequestInterface;
 use Lilith\Http\Message\ResponseInterface;
 
-interface RequestServiceInterface
+interface RequestSenderInterface
 {
-    public function request(RequestInterface $request): ResponseInterface;
+    public function send(RequestInterface $request): ResponseInterface;
 }
