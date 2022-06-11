@@ -13,7 +13,7 @@ class Client implements ClientInterface
 
     public function __construct(protected RequestSenderInterface $requestSender = new RequestSender()) {}
 
-    final public function request(RequestInterface $request): ResponseInterface
+    final public function sendRequest(RequestInterface $request): ResponseInterface
     {
         return $this->requestSender->send($request);
     }

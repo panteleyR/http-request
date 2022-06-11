@@ -14,7 +14,7 @@ class RequestSender implements RequestSenderInterface
     public function send(RequestInterface $request): ResponseInterface
     {
         $handle = curl_init($request->getUri());
-        $noResponseBodyMode = in_array($request->getMethod(), [HttpMethods::HEAD, HttpMethods::TRACE], true);
+        $noResponseBodyMode = in_array($request->getMethod(), [HttpMethodsEnum::HEAD, HttpMethodsEnum::TRACE], true);
 
         $headers = [];
         $headerParser = function (CurlHandle $curl, string $header) use (&$headers) {
@@ -30,7 +30,7 @@ class RequestSender implements RequestSenderInterface
         };
 
         $options = [
-            CURLOPT_CUSTOMREQUEST => $request->getMethod(),
+            CURLOPT_CUSTOMREQUEST => $request->getMethod()->name,
             CURLOPT_URL => $request->getUri(),
             CURLOPT_HEADEROPT => $request->getHeaders(),
             CURLOPT_HTTP_VERSION => $this->getCurlProtocolVersion($request->getProtocolVersion()),
@@ -55,7 +55,7 @@ class RequestSender implements RequestSenderInterface
             $responseBody = null;
         }
 
-        if(curl_errno($handle) !== 0) {
+        if (curl_errno($handle) !== 0) {
             throw new CurlRequestError('Error curl: ' . curl_error($handle));
         }
 

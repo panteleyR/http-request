@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Lilith\Http\Message;
 
+use Lilith\Http\HttpMethodsEnum;
+
 class Request extends Message implements RequestInterface
 {
     public function __construct(
-        protected readonly string $method,
+        protected readonly HttpMethodsEnum $method,
         protected readonly string $uri,
         array $headers = [],
         null|string $body = null,
@@ -21,7 +23,7 @@ class Request extends Message implements RequestInterface
         return $this->uri;
     }
 
-    public function getMethod(): string
+    public function getMethod(): HttpMethodsEnum
     {
         return $this->method;
     }
