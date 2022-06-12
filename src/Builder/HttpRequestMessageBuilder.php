@@ -2,34 +2,21 @@
 
 declare(strict_types=1);
 
-namespace Lilith\Http;
+namespace Lilith\Http\Builder;
 
+use Lilith\Http\HttpMethodsEnum;
 use Lilith\Http\Message\Request;
 use Lilith\Http\Message\RequestInterface;
 
-class HttpRequestMessageBuilder
+class HttpRequestMessageBuilder implements HttpRequestMessageBuilderInterface
 {
     protected null|array $body = null;
     protected null|array $files = null;
     protected array $headers = [];
-    protected array $query = [];
+    protected null|array $query = null;
     protected string $url;
     protected HttpMethodsEnum $method;
     protected string $protocolVersion = '1.1';
-
-    public function __construct(
-        null|string $url,
-        array $query = [],
-        array $headers = [],
-        null|array $body = null,
-        string $protocolVersion = '1.1',
-    ) {
-        $this->url = $url ?? '';
-        $this->body = $body;
-        $this->query = $query;
-        $this->headers = $headers;
-        $this->protocolVersion = $protocolVersion;
-    }
 
     public function addHeaders(array $headers): static
     {
@@ -73,12 +60,15 @@ class HttpRequestMessageBuilder
         return $this;
     }
 
-    public function createRequestMessage(): RequestInterface
+    public function create(): RequestInterface
     {
         $method = $this->method;
-        $query = http_build_query($this->query);
-        $url = $this->url . ($query === '' ? $query : '?' . $query);
-        $body = null;
+        $url = $this->url;
+        $body = $this->body;
+
+        if ($this->query !== null) {
+            $url .= '?' . http_build_query($this->query);
+        }
 
         if ($this->body !== null) {
             $body = http_build_query($this->body);
@@ -88,6 +78,20 @@ class HttpRequestMessageBuilder
             //@TODO multiple/form-data
         }
 
-        return new Request($method, $url, $this->headers, $body, $this->protocolVersion);
+        $requestMessage = new Request($method, $url, $this->headers, $body, $this->protocolVersion);
+        $this->clear();
+
+        return $requestMessage;
+    }
+
+    public function clear(): void
+    {
+        $this->body = null;
+        $this->files = null;
+        $this->headers = [];
+        $this->query = null;
+        unset($this->url);
+        unset($this->method);
+        $this->protocolVersion = '1.1';
     }
 }

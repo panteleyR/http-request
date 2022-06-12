@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Lilith\Http;
+namespace Lilith\Http\RequestSender;
 
 use CurlHandle;
 use Lilith\Http\Message\RequestInterface;
@@ -11,6 +11,10 @@ use Lilith\Http\Message\ResponseInterface;
 
 class RequestSender implements RequestSenderInterface
 {
+    //@TODO Реализовать условный и частичный get
+    /**
+     * @throws CurlRequestException
+     */
     public function send(RequestInterface $request): ResponseInterface
     {
         $handle = curl_init($request->getUri());
@@ -56,7 +60,7 @@ class RequestSender implements RequestSenderInterface
         }
 
         if (curl_errno($handle) !== 0) {
-            throw new CurlRequestError('Error curl: ' . curl_error($handle));
+            throw new CurlRequestException('Error curl: ' . curl_error($handle));
         }
 
         unset($handle);

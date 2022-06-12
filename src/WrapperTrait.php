@@ -9,15 +9,10 @@ use Lilith\Http\Message\RequestInterface;
 use Lilith\Http\Message\ResponseInterface;
 use Lilith\Http\Parser\ResponseParserInterface;
 
-class ClientWrapper extends AbstractClientWrapper
+trait WrapperTrait
 {
-    protected const BASE_URL = null;
-    protected const DEFAULT_QUERY = null;
-    protected const DEFAULT_HEADERS = null;
-    protected const DEFAULT_BODY = null;
-
     public function __construct(
-        ClientInterface $client,
+        protected ClientInterface $client,
         protected HttpRequestMessageBuilderInterface $httpRequestMessageBuilder,
         protected ResponseParserInterface $responseParser,
     ) {
@@ -25,19 +20,23 @@ class ClientWrapper extends AbstractClientWrapper
         $this->completeBaseValues();
     }
 
-    protected function completeBaseValues(): void {}
-    protected function completeDefaultValues(): void {}
-
-    //@TODO Сделать связывание дефолт параметров под билдер для авторизации через коллбеки
-    protected function request(RequestInterface $request): array
-    {
-        $response = $this->sendRequest($request);
-
-        return $this->parseResponse($response);
-    }
+    abstract protected function completeBaseValues(): void;
+    abstract protected function completeDefaultValues(): void;
 
     protected function parseResponse(ResponseInterface $response): array
     {
         return $this->responseParser->parse($response);
     }
+
+    protected function request(RequestInterface $request): array
+    {
+        $this->preRequest($request);
+        $response = $this->sendRequest($request);
+        $this->postRequest($request, $response);
+
+        return $this->parseResponse($response);
+    }
+
+    abstract protected function preRequest(RequestInterface $request): void;
+    abstract protected function postRequest(RequestInterface $request, ResponseInterface $response): void;
 }
