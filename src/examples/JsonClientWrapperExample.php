@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Lilith\Http\Examples;
 
+use Lilith\Http\Builder\HttpRequestMessageBuilderInterface;
 use Lilith\Http\ClientInterface;
 use Lilith\Http\ClientWrapper;
 use Lilith\Http\HttpMethodsEnum;
-use Lilith\Http\HttpRequestMessageBuilderInterface;
-use Lilith\Http\JsonResponseParser;
 use Lilith\Http\Message\RequestInterface;
 use Lilith\Http\Message\ResponseInterface;
+use Lilith\Http\Parser\JsonResponseParser;
 
 class JsonClientWrapperExample extends ClientWrapper
 {
