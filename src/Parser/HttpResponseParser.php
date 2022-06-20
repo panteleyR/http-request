@@ -8,7 +8,7 @@ use Lilith\Http\Message\ResponseInterface;
 
 class HttpResponseParser implements ResponseParserInterface
 {
-    public function parse(ResponseInterface $response): array
+    public static function parseBody(ResponseInterface $response): array
     {
         parse_str($response->getBody(), $responseList);
 

@@ -8,5 +8,5 @@ use Lilith\Http\Message\ResponseInterface;
 
 interface ResponseParserInterface
 {
-    public function parse(ResponseInterface $response): mixed;
+    public static function parseBody(ResponseInterface $response): mixed;
 }

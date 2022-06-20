@@ -13,27 +13,27 @@ trait HttpMethodsTrait
     {
         $message = new Request(HttpMethodsEnum::GET, $url, $headers);
 
-        return $this->request($message);
+        return $this->sendRequest($message);
     }
 
     public function post(string $url, array $headers = [], string $body = ''): ResponseInterface
     {
         $message = new Request(HttpMethodsEnum::POST, $url, $headers, $body);
 
-        return $this->request($message);
+        return $this->sendRequest($message);
     }
 
     public function put(string $url, array $headers = [], string $body = ''): ResponseInterface
     {
         $message = new Request(HttpMethodsEnum::PUT, $url, $headers, $body);
 
-        return $this->request($message);
+        return $this->sendRequest($message);
     }
 
     public function patch(string $url, array $headers = [], string $body = ''): ResponseInterface
     {
         $message = new Request(HttpMethodsEnum::PATCH, $url, $headers, $body);
 
-        return $this->request($message);
+        return $this->sendRequest($message);
     }
 }

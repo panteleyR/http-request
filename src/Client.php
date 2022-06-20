@@ -6,6 +6,8 @@ namespace Lilith\Http;
 
 use Lilith\Http\Message\RequestInterface;
 use Lilith\Http\Message\ResponseInterface;
+use Lilith\Http\RequestSender\RequestSenderInterface;
+use Lilith\Http\RequestSender\RequestSender;
 
 class Client implements ClientInterface
 {
